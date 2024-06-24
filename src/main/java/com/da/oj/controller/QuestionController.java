@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 /**
  * 题目接口
@@ -145,6 +146,29 @@ public class QuestionController {
         ThrowUtils.throwIf(question == null, ErrorCode.NOT_FOUND_ERROR);
         // 获取封装类
         return ResultUtils.success(questionService.getQuestionVO(question, request));
+    }
+
+
+    /**
+     * 根据 id 获取题目
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/get")
+    public BaseResponse<Question> getQuestionById(long id, HttpServletRequest request) {
+        ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
+
+        // 查询数据库
+        Question question = questionService.getById(id);
+        ThrowUtils.throwIf(question == null, ErrorCode.NOT_FOUND_ERROR);
+        User loginUser = userService.getLoginUser(request);
+        // 不是本人或管理员，不能获取到所有信息
+        if(!Objects.equals(question.getUserId(), loginUser.getId()) && !userService.isAdmin(request)){
+            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
+        }
+        // 获取封装类
+        return ResultUtils.success(question);
     }
 
     /**
