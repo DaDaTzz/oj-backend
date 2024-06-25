@@ -8,18 +8,12 @@ import com.da.oj.judge.codesandbox.CodeSandboxFactory;
 import com.da.oj.judge.codesandbox.CodeSandboxProxy;
 import com.da.oj.judge.codesandbox.model.ExecuteCodeRequest;
 import com.da.oj.judge.codesandbox.model.ExecuteCodeResponse;
-import com.da.oj.judge.strategy.DefaultJudgeStrategy;
-import com.da.oj.judge.strategy.JavaLanguageJudgeStrategy;
 import com.da.oj.judge.strategy.JudgeContext;
-import com.da.oj.judge.strategy.JudgeStrategy;
 import com.da.oj.model.dto.question.JudgeCase;
-import com.da.oj.model.dto.question.JudgeConfig;
 import com.da.oj.model.dto.questionSubmit.JudgeInfo;
 import com.da.oj.model.entity.Question;
 import com.da.oj.model.entity.QuestionSubmit;
-import com.da.oj.model.enums.JudgeInfoMessageEnum;
 import com.da.oj.model.enums.QuestionSubmitStatesEnum;
-import com.da.oj.model.vo.QuestionSubmitVO;
 import com.da.oj.service.QuestionService;
 import com.da.oj.service.QuestionSubmitService;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
