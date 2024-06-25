@@ -10,6 +10,7 @@ import com.da.oj.common.ErrorCode;
 import com.da.oj.constant.CommonConstant;
 import com.da.oj.exception.BusinessException;
 import com.da.oj.exception.ThrowUtils;
+import com.da.oj.judge.JudgeService;
 import com.da.oj.mapper.QuestionSubmitMapper;
 import com.da.oj.model.dto.questionSubmit.JudgeInfo;
 import com.da.oj.model.dto.questionSubmit.QuestionSubmitAddRequest;
@@ -30,12 +31,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -50,10 +53,13 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
 
     @Resource
     private UserService userService;
-    @Autowired
-    private QuestionSubmitMapper questionSubmitMapper;
+
     @Resource
     private QuestionService questionService;
+
+    @Resource
+    @Lazy
+    private JudgeService judgeService;
 
     /**
      * 校验数据
@@ -227,7 +233,11 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         if(!res){
             throw new BusinessException(ErrorCode.SYSTEM_ERROR);
         }
-        return questionSubmit.getId();
+        Long questionSubmitId = questionSubmit.getId();
+        CompletableFuture.runAsync(() -> {
+            judgeService.doJudge(questionSubmitId);
+        });
+        return questionSubmitId;
     }
 
 }

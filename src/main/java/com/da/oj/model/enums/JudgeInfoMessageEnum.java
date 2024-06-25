@@ -18,6 +18,7 @@ public enum JudgeInfoMessageEnum {
     Wrong_Answer("答案错误", "Wrong_Answer"),
     RunTime_Error("运行错误", "RunTime_Error"),
     Memory_Limit("内存溢出", "Memory_Limit"),
+    Time_Limit("超时", "Time_Limit"),
     System_Error("系统错误", "System_Error"),
     Compile_Error("编译", "Compile_Error"),
     Dangerous_Operation("危险操作", "Dangerous_Error");
